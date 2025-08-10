@@ -1,8 +1,14 @@
 rm(list = ls())
 options(scipen = 999, max.print = 1000)
 par(mar = c(5, 3, 2, 2) + 0.1) # Better margins
-setwd("c:/Users/iadev/My Drive/Documenti/Università magistrale/Tesi/Dati e codice tesi") # Script location as wd
-getwd()
+
+# Load environment variable
+readRenviron("credentials.Renviron") # Load environment variables from .Renviron file
+working_dir <- Sys.getenv("WORKING_DIR") # WORKING_DIR contains the path to the directory containing the \macro and \stock folders
+if (working_dir == "") {
+  stop("WORKING_DIR environment variable not set. Please check your .Renviron file.")
+}
+setwd(working_dir)
 
 library(readxl)
 source("functions.R") # Load functions
@@ -10,7 +16,7 @@ source("functions.R") # Load functions
 # STOXX 600 ---------------------------------------------------------------
 
 # Bank
-stoxx600_bank_data <- read_excel("Stock/STOXX 600 - D.xlsx",
+stoxx600_bank_data <- read_excel("stock/STOXX 600 - D.xlsx",
   skip = 3,
   sheet = 1,
   na = "NA"
@@ -27,7 +33,7 @@ stoxx600_bank_data <- as.data.frame(stoxx600_bank_data)
 str(stoxx600_bank_data)
 
 # Insurance
-stoxx600_ins_data <- read_excel("Stock/STOXX 600 - D.xlsx",
+stoxx600_ins_data <- read_excel("stock/STOXX 600 - D.xlsx",
   skip = 3,
   sheet = 2,
   na = "NA"
@@ -44,7 +50,7 @@ str(stoxx600_ins_data)
 
 
 # Financial services
-stoxx600_fs_data <- read_excel("Stock/STOXX 600 - D.xlsx",
+stoxx600_fs_data <- read_excel("stock/STOXX 600 - D.xlsx",
   skip = 3,
   sheet = 3,
   na = "NA"
@@ -418,7 +424,7 @@ cbind(fsCode, key[fsInd], fsID, fsCountryAbb, fsCountryComplete, fsCurrency)
 # Macroeconomic variables -------------------------------------------------
 
 ##### STOXX 600 returns #####
-market_data <- read_excel("Macro/Market Return.xlsx",
+market_data <- read_excel("macro/Market Return.xlsx",
   skip = 3,
   sheet = 1,
   na = "NA"
@@ -536,7 +542,7 @@ rm(list = c("market_data", "market_logret", "market_indices", "market_logret_wee
 
 
 ##### VSTOXX #####
-volatility_data <- read_excel("Macro/VSTOXX.xlsx",
+volatility_data <- read_excel("macro/VSTOXX.xlsx",
   skip = 3,
   sheet = 1,
   na = "NA"
@@ -648,7 +654,7 @@ rm(list = c("volatility_data", "volatility_logret", "volatility_indices"))
 ##### Par Yield AAA EZ #####
 # Used to compute a short term funding liquidity risk measure,
 
-py_3m10y_aaa_data <- read.csv("Macro/PY 3M10Y AAA.csv", header = TRUE)
+py_3m10y_aaa_data <- read.csv("macro/PY 3M10Y AAA.csv", header = TRUE)
 head(py_3m10y_aaa_data)
 
 # Second column is redundant + colnames adjustments
@@ -719,7 +725,7 @@ rm(list = c("py_3m10y_aaa_data"))
 ##### Par Yield all issuers EZ #####
 # Used to compute a short term funding liquidity risk measure
 
-py_3m10y_all_data <- read.csv("Macro/PY 3M10Y all.csv", header = TRUE)
+py_3m10y_all_data <- read.csv("macro/PY 3M10Y all.csv", header = TRUE)
 head(py_3m10y_all_data)
 
 # Second column is redundant + colnames adjustments
@@ -780,7 +786,7 @@ rm(list = c("py_3m10y_all_data"))
 
 ##### Euribor 3M #####
 # Used to compute a short term funding liquidity risk
-euribor_3M_data <- read_excel("Macro/Euribor 3M.xlsx", skip = 6, col_names = FALSE)
+euribor_3M_data <- read_excel("macro/Euribor 3M.xlsx", skip = 6, col_names = FALSE)
 head(euribor_3M_data)
 
 # Casting to df
@@ -815,7 +821,7 @@ rm(list = c("euribor_3M_data"))
 
 ##### Par Yield 10Y Corporate Bonds - issuers at several grades #####
 # Relevant to compute a credit risk spread measure
-py_corp_10y_data <- read_excel("Macro/RY CORP 10Y.xlsx",
+py_corp_10y_data <- read_excel("macro/RY CORP 10Y.xlsx",
   col_names = TRUE
 )
 head(py_corp_10y_data)
@@ -871,7 +877,7 @@ rm(list = c("py_corp_10y_data"))
 
 
 ##### ETF Real Estate #####
-housing_data <- read_excel("Macro/ETF Real Estate.xlsx",
+housing_data <- read_excel("macro/ETF Real Estate.xlsx",
   skip = 3,
   sheet = 1,
   na = "",
@@ -950,7 +956,7 @@ rm(list = c("housing_data", "housing_logret", "housing_indices"))
 # ##### STOXX Real Estate #####
 # Wrong real estate data
 
-# housing_data <- read_excel("Macro/STOXX Real Estate.xlsx",
+# housing_data <- read_excel("macro/STOXX Real Estate.xlsx",
 #   skip = 3,
 #   sheet = 1,
 #   na = "NA"
