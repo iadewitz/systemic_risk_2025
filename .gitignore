@@ -1,3 +1,4 @@
 .Rprofile
 .Rhistory
 credentials.Renviron
+.claude/settings.local.json
