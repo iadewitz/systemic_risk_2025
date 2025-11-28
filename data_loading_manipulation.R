@@ -4,14 +4,16 @@ par(mar = c(5, 3, 2, 2) + 0.1) # Better margins
 
 # Load environment variable
 readRenviron("credentials.Renviron") # Load environment variables from .Renviron file
-working_dir <- Sys.getenv("WORKING_DIR") # WORKING_DIR contains the path to the directory containing the \macro and \stock folders
+working_dir <- Sys.getenv("WORKING_DIR") # WORKING_DIR contains the path to the directory containing the \macro, \stock folders
 if (working_dir == "") {
-  stop("WORKING_DIR environment variable not set. Please check your .Renviron file.")
+  stop("DATA_DIR environment variable not set. Please check your .Renviron file.")
 }
 setwd(working_dir)
 
+# Load libraries
 library(readxl)
-source("functions.R") # Load functions
+file_dir <- Sys.getenv("FILE_DIR") # FILE_DIR contains the path to the directory containing the .R files
+source(paste(file_dir, "/functions.R", sep = "")) # Load functions
 
 # STOXX 600 ---------------------------------------------------------------
 
